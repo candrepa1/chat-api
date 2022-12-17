@@ -1,6 +1,9 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require("sequelize");
+const db = require("../utils/database");
+const Conversations = require("./conversations.models");
+const Users = require("./users.models");
 
-const Participants = new Sequelize('participants', {
+const Participants = db.define('participants', {
     id: {
         type: DataTypes.UUID,
         primaryKey: true

@@ -1,6 +1,9 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require("sequelize");
+const db = require("../utils/database");
+const Conversations = require("./conversations.models");
+const Users = require("./users.models");
 
-const Messages = new Sequelize('messages', {
+const Messages = db.define('messages', {
     id: {
         type: DataTypes.UUID,
         primaryKey: true,

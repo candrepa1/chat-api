@@ -28,9 +28,11 @@ const Users = db.define('users', {
     }, 
     profile_image: {
         type: DataTypes.STRING,
+        defaultValue: null,
     }, 
     phone: {
         type: DataTypes.STRING(16),
+        defaultValue: null,
     }
 })
 

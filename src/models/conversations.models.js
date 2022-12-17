@@ -1,6 +1,8 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require("sequelize");
+const db = require("../utils/database");
+const Users = require('./users.models');
 
-const Conversations = new Sequelize('conversations', {
+const Conversations = db.define('conversations', {
     id: {
         type: DataTypes.UUID,
         primaryKey: true
@@ -10,7 +12,8 @@ const Conversations = new Sequelize('conversations', {
         defaultValue: 'New conversation'
     },
     image_url: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING, 
+        defaultValue: null,
     }, 
     user_id: {
         type: DataTypes.UUID,
