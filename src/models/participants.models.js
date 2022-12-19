@@ -8,7 +8,7 @@ const Participants = db.define('participants', {
         type: DataTypes.UUID,
         primaryKey: true
     }, 
-    conversation_id: {
+    conversationId: {
         type: DataTypes.UUID, 
         allowNull: false,
         references: {
@@ -16,7 +16,7 @@ const Participants = db.define('participants', {
             model: Conversations,
         }
     }, 
-    user_id: {
+    userId: {
         type: DataTypes.UUID, 
         allowNull: false,
         references: {

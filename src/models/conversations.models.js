@@ -11,11 +11,11 @@ const Conversations = db.define('conversations', {
         type: DataTypes.STRING(30),
         defaultValue: 'New conversation'
     },
-    image_url: {
+    imageUrl: {
         type: DataTypes.STRING, 
         defaultValue: null,
     }, 
-    user_id: {
+    userId: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {

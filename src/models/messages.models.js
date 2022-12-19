@@ -8,7 +8,7 @@ const Messages = db.define('messages', {
         type: DataTypes.UUID,
         primaryKey: true,
     }, 
-    user_id: {
+    userId: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
@@ -16,7 +16,7 @@ const Messages = db.define('messages', {
             model: Users,
         }
     }, 
-    conversation_id: {
+    conversationId: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {

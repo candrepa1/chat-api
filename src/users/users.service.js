@@ -32,7 +32,7 @@ const postUser = async (req, res) => {
             lastname: 'string',
             email: 'string',
             password: 'string',
-            profile_image: 'string',
+            profileImage: 'string',
             phone: 'string'
         }})
     }
@@ -52,9 +52,7 @@ const deleteUser = async (req, res) => {
 const patchUser = async (req, res) => {
     const {id} = req.params;
     try {
-        const user = await updateUser(id, req.body);
-
-        console.log(user, 'random!')
+        await updateUser(id, req.body);
 
         res.status(200).json({message: 'User updated sucessfully'})
     } catch(error) {

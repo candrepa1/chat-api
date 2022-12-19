@@ -6,27 +6,44 @@ const Users = require('../models/users.models');
 const findConversationsForUser = async (id) => {
     const conversations = await Participants.findAll({
         where: {
-            user_id: id
+            userId: id
         }, 
         include: [
             {
-                model: Conversations,
-                through: {
-                    attributes: ['title', 'image_url']
-                }
-            }, 
+                model: Conversations
+            }
         ]
     })
 
     return conversations;
 }
 
-const createConversation = async ({title, image_url, user_id, participantsIds}) => {
+const findConversation = async (id) => {
+    const conversation = await Conversations.findOne({
+        where: {
+            id
+        }, 
+        include: [
+            {
+                model: Participants, 
+                include: [
+                    {
+                        model: Users
+                    }
+                ]
+            }
+        ]
+    })
+
+    return conversation
+}
+
+const createConversation = async ({title, imageUrl, userId, participantsIds}) => {
     const conversation = await Conversations.create({
         id: uuid.v4(),
         title,
-        image_url,
-        user_id
+        imageUrl,
+        userId
     })
 
     const participants = [];
@@ -35,8 +52,8 @@ const createConversation = async ({title, image_url, user_id, participantsIds}) 
         for (const id of participantsIds) {
             const participant = await Participants.create({
                 id: uuid.v4(),
-                conversation_id: conversation.id,
-                user_id: id
+                conversationId: conversation.id,
+                userId: id
             })
 
             participants.push(participant);
@@ -49,7 +66,36 @@ const createConversation = async ({title, image_url, user_id, participantsIds}) 
     }
 }
 
+const removeConversation = async (id) => {
+    await Participants.destroy({
+        where: {
+            conversationId: id
+        }
+    });
+
+    const conversation = await Conversations.destroy({
+        where: {
+            id
+        }
+    })
+
+    return conversation;
+}
+
+const updateConversation = async (id, toUpdate) => {
+    const conversation = await Conversations.update(toUpdate, {
+        where: {
+            id
+        }
+    })
+
+    return conversation;
+}
+
 module.exports = {
     findConversationsForUser, 
-    createConversation
+    createConversation, 
+    findConversation, 
+    removeConversation, 
+    updateConversation
 }

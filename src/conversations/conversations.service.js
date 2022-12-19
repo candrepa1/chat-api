@@ -1,4 +1,4 @@
-const { findConversationsForUser, createConversation } = require("./conversations.controller")
+const { findConversationsForUser, createConversation, findConversation, removeConversation, updateConversation } = require("./conversations.controller")
 
 const getConversationsForUser = async (req, res) => {
     const {id} = req.user;
@@ -11,26 +11,70 @@ const getConversationsForUser = async (req, res) => {
     }
 }
 
-const postConversation = async (req, res) => {
-    const {title, image_url, user_id, participantsIds} = req.body;
+const getConversation = async (req, res) => {
+    const {conversation_id} = req.params;
+    const errorMessage = {message: 'Could not find a conversation with the given id'}
+    try {
+        const conversation = await findConversation(conversation_id);
 
-    console.log(title, image_url, user_id, participantsIds, 'body!')
+        if(conversation) {
+            res.status(200).json(conversation)
+        } else {
+            res.status(400).json(errorMessage)
+        }
+    } catch (error) {
+        res.status(400).json(errorMessage)
+    }
+}
+
+const postConversation = async (req, res) => {
+    const {title, imageUrl, participantsIds} = req.body;
+    const {id} = req.user;
+    const errorMessage = {
+        message: 'Unable to create a new conversation', expectedFields: {
+            title: 'string', imageUrl: 'string', userId: 'string', participantsIds: 'array of strings'
+        }
+    }
 
     try {
-        const data = await createConversation({title, image_url, user_id, participantsIds});
+        if(participantsIds) {
+            const data = await createConversation({title, imageUrl, userId: id, participantsIds});
 
-        res.status(200).json(data)
+            res.status(200).json(data)
+        } else {
+            res.status(400).json(errorMessage)
+        }
     } catch (error) {
-        console.log(error, 'error!')
-        res.status(400).json({
-            message: 'Unable to create a new conversation', expectedFields: {
-                title: 'string', image_url: 'string', user_id: 'string', participantsIds: 'array of strings'
-            }
-        })
+        res.status(400).json(errorMessage)
+    }
+}
+
+const deleteConversation = async (req, res) => {
+    const {conversation_id} = req.params;
+    try {
+        await removeConversation(conversation_id)
+
+        res.status(200).json({message: 'Conversation was deleted'})
+    } catch (error) {
+        res.status(400).json({message: 'Could not delete conversation'})
+    }
+}  
+
+const patchConversation = async (req, res) => {
+    const {conversation_id} = req.params;
+    try {
+        await updateConversation(conversation_id, req.body);
+
+        res.status(200).json({message: 'Conversation updated sucessfully'})
+    } catch(error) {
+        res.status(400).json({message: 'Unable to update conversation'})
     }
 }
 
 module.exports = {
     getConversationsForUser,
-    postConversation
+    postConversation, 
+    getConversation,
+    deleteConversation, 
+    patchConversation
 }

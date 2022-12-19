@@ -26,7 +26,7 @@ const Users = db.define('users', {
         type: DataTypes.STRING,
         allowNull: false,
     }, 
-    profile_image: {
+    profileImage: {
         type: DataTypes.STRING,
         defaultValue: null,
     }, 

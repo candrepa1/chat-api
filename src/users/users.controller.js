@@ -28,14 +28,14 @@ const findUserByEmail = async (email) => {
     return user;
 }
 
-const createUser = async ({firstname, lastname, email, password, profile_image, phone}) => {
+const createUser = async ({firstname, lastname, email, password, profileImage, phone}) => {
     const user = await Users.create({
         id: uuid.v4(),
         firstname,
         lastname,
         email,
         password: encryptPassword(password),
-        profile_image,
+        profileImage,
         phone,
     });
 
